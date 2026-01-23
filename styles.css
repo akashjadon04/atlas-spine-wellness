@@ -1,0 +1,688 @@
+/* ==========================================================================
+   ATLAS SPINE & WELLNESS — THE ROYAL ARCHITECTURE (vFINAL)
+   ==========================================================================
+   • Client: Atlas Spine & Wellness (Austin, TX)
+   • Theme: "Oxford Royal" (Deep Navy, Antique Gold, Ivory)
+   • Tech Stack: Pure CSS3, Glassmorphism, GPU-Accelerated Animations
+   • Features: 
+     - Base64 Pattern Injection
+     - High-Fidelity Micro-interactions
+     - Responsive Grid System
+     - SEO-Optimized Typography
+   ========================================================================== */
+
+/* ==========================================================================
+   1. ROOT VARIABLES & DESIGN TOKENS
+   ========================================================================== */
+:root {
+  /* --- PALETTE: ROYALTY DEFINED --- */
+  --navy-deep: #051022;       /* The Void */
+  --navy-primary: #0a192f;    /* Oxford Navy */
+  --navy-light: #172a46;      /* Lighter Navy (Cards) */
+  --navy-accent: #233554;     /* Borders */
+
+  --gold-primary: #d4af37;    /* Metallic Gold */
+  --gold-hover: #b5952f;      /* Darker Gold */
+  --gold-dim: rgba(212, 175, 55, 0.1);
+  --gold-glow: rgba(212, 175, 55, 0.4);
+
+  --ivory-bg: #fdfbf7;        /* Premium Paper Feel */
+  --white: #ffffff;
+  --text-dark: #0a192f;
+  --text-grey: #64748b;
+  --text-light: #ccd6f6;
+
+  /* --- TYPOGRAPHY --- */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Manrope', sans-serif;
+
+  /* --- SPACING & LAYOUT --- */
+  --max-width: 1280px;
+  --header-height: 90px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-round: 50px;
+
+  /* --- EFFECTS --- */
+  --shadow-sm: 0 4px 6px rgba(10, 25, 47, 0.05);
+  --shadow-md: 0 10px 30px rgba(10, 25, 47, 0.1);
+  --shadow-lg: 0 20px 50px rgba(10, 25, 47, 0.2);
+  --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.2);
+  
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+  --backdrop-blur: blur(12px);
+
+  /* --- ANIMATION PHYSICS --- */
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-fast: 0.2s;
+  --transition-med: 0.4s;
+  --transition-slow: 0.8s;
+}
+
+/* ==========================================================================
+   2. RESET & GLOBAL STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--ivory-bg);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  position: relative;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--navy-primary);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+a { text-decoration: none; color: inherit; transition: var(--transition-fast); }
+ul { list-style: none; }
+img { max-width: 100%; height: auto; display: block; }
+button, input, textarea { font-family: inherit; }
+
+/* ==========================================================================
+   3. ANIMATION KEYFRAMES (THE "WOW" FACTOR)
+   ========================================================================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseGold {
+  0% { box-shadow: 0 0 0 0 var(--gold-glow); }
+  70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes rotateBadge {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Utility Classes for Animation */
+.animate-fade-up { animation: fadeInUp 1s var(--ease-out) forwards; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s var(--ease-out);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* ==========================================================================
+   4. LAYOUT UTILITIES & BACKGROUND GRAPHICS
+   ========================================================================== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.section {
+  padding: 100px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- ROYAL GRAPHIC PATTERNS --- */
+.bg-pattern {
+  background-color: var(--ivory-bg);
+  background-image: 
+    radial-gradient(var(--navy-accent) 0.5px, transparent 0.5px),
+    radial-gradient(var(--navy-accent) 0.5px, var(--ivory-bg) 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 1;
+}
+
+.bg-navy { background-color: var(--navy-primary); color: var(--white); }
+.bg-navy h2, .bg-navy h3, .bg-navy p { color: var(--white); }
+.bg-white { background-color: var(--white); }
+.bg-ivory { background-color: var(--ivory-bg); }
+
+.gold-text { color: var(--gold-primary) !important; }
+.center-header { text-align: center; margin-bottom: 60px; max-width: 800px; margin-left: auto; margin-right: auto; }
+
+.section::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(10,25,47,0.1), transparent);
+}
+
+/* ==========================================================================
+   5. NAVIGATION (GLASS & GOLD - UPDATED)
+   ========================================================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--header-height);
+  width: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: var(--backdrop-blur);
+  border-bottom: 2px solid var(--gold-primary);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  flex-wrap: nowrap; /* Prevents wrapping on medium screens */
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--navy-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0; /* Ensures logo doesn't shrink */
+}
+
+.logo i { 
+  color: var(--gold-primary); 
+  font-size: 2rem; 
+  filter: drop-shadow(0 2px 4px rgba(212,175,55,0.3));
+}
+
+.nav-menu {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  margin-left: auto; /* Pushes menu to the right */
+}
+
+.nav-menu a {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--navy-primary);
+  position: relative;
+  padding: 5px 0;
+  white-space: nowrap; /* Prevents links from breaking lines */
+}
+
+/* Magnetic Underline Effect */
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; width: 0%; height: 2px;
+  background: var(--gold-primary);
+  transition: width 0.3s var(--ease-out);
+}
+.nav-menu a:not(.btn):hover::after, 
+.nav-menu a:not(.btn).active::after { width: 100%; }
+.nav-menu a:hover { color: var(--gold-primary); }
+
+/* HEADER BUTTON FIX: Strict Styling for Visibility */
+.nav-menu .btn-royal { 
+  color: #ffffff !important; 
+  background: var(--navy-primary) !important;
+  border-color: var(--navy-primary) !important;
+  margin-left: 10px;
+}
+.nav-menu .btn-royal:hover {
+  background: var(--gold-primary) !important;
+  border-color: var(--gold-primary) !important;
+  color: var(--navy-primary) !important;
+}
+
+/* Mobile Menu Toggle */
+.hamburger { display: none; cursor: pointer; z-index: 1001; }
+.hamburger span {
+  display: block; width: 28px; height: 3px; 
+  background: var(--navy-primary); margin: 6px 0;
+  transition: 0.3s;
+}
+
+/* ==========================================================================
+   6. HERO SECTIONS (CINEMATIC)
+   ========================================================================== */
+.hero, .page-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+.hero { height: 100vh; min-height: 700px; }
+.page-hero { height: 60vh; min-height: 400px; }
+
+.hero::before, .page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(5,16,34,0.9), rgba(5,16,34,0.6));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: var(--white);
+  max-width: 900px;
+  padding: 0 20px;
+}
+
+.hero-tag {
+  display: inline-block;
+  background: var(--gold-primary);
+  color: var(--navy-primary);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 5vw, 5rem);
+  color: var(--white);
+  margin-bottom: 24px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.italic-accent {
+  font-family: var(--font-heading);
+  font-style: italic;
+  color: var(--gold-primary);
+  font-weight: 400;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 40px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ==========================================================================
+   7. BUTTONS (INTERACTIVE & PULSING)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  transition: all 0.3s var(--ease-out);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-royal {
+  background: var(--navy-primary);
+  color: #ffffff;
+  border: 1px solid var(--navy-primary);
+  box-shadow: 0 4px 15px rgba(10, 25, 47, 0.3);
+}
+
+.btn-royal:hover {
+  background: var(--gold-primary);
+  border-color: var(--gold-primary);
+  color: var(--navy-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: var(--navy-primary);
+  border: 2px solid var(--navy-primary);
+}
+.btn-outline-dark:hover {
+  background: var(--navy-primary);
+  color: var(--white);
+}
+
+/* ==========================================================================
+   8. COMPONENT: CARDS & GRID
+   ========================================================================== */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.value-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px 30px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: var(--transition-med);
+  position: relative;
+}
+
+.value-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-10px);
+  border-color: var(--gold-primary);
+}
+
+.icon-circle {
+  width: 80px; height: 80px;
+  background: var(--gold-primary);
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; color: var(--navy-primary);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  transition: 0.5s;
+}
+.value-card:hover .icon-circle { transform: scale(1.1) rotate(10deg); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.team-card {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  transition: var(--transition-med);
+}
+
+.team-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+  border-color: var(--gold-primary);
+}
+
+.member-img { width: 40%; position: relative; overflow: hidden; }
+.member-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+.team-card:hover .member-img img { transform: scale(1.05); }
+
+.member-info { padding: 30px; width: 60%; display: flex; flex-direction: column; justify-content: center; }
+.member-info h3 { margin-bottom: 5px; font-size: 1.4rem; }
+.role { font-size: 0.85rem; color: var(--gold-primary); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; display: block; }
+
+.credentials { margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+.credentials li { font-size: 0.9rem; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+.credentials i { color: var(--gold-primary); }
+
+/* ==========================================================================
+   9. COMPONENT: INFO BOX & SPLIT LAYOUT
+   ========================================================================== */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.image-frame {
+  position: relative;
+  padding: 15px;
+  border: 1px solid var(--gold-primary);
+}
+
+.image-frame img { display: block; box-shadow: var(--shadow-md); }
+
+.floating-badge {
+  position: absolute;
+  bottom: -25px; right: -25px;
+  background: var(--gold-primary);
+  color: var(--navy-primary);
+  padding: 15px 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-gold);
+  z-index: 2;
+  animation: float 4s ease-in-out infinite;
+}
+
+.info-box {
+  background: var(--white);
+  padding: 50px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  border-left: 5px solid var(--gold-primary);
+}
+
+.info-icon { font-size: 3rem; color: var(--navy-primary); }
+.info-content h3 { margin-bottom: 10px; }
+
+/* ==========================================================================
+   10. COMPONENT: ADVANCED FORMS
+   ========================================================================== */
+.form-container {
+  background: var(--white);
+  padding: 40px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border-top: 4px solid var(--gold-primary);
+}
+
+.form-group { margin-bottom: 25px; position: relative; }
+
+.form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--navy-primary);
+  margin-bottom: 8px;
+}
+
+.form input, .form textarea, .form select {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-sm);
+  background: #f9f9f9;
+  font-size: 1rem;
+  transition: 0.3s;
+  color: var(--navy-primary);
+}
+
+.form input:focus, .form textarea:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--gold-dim);
+}
+
+/* ==========================================================================
+   11. COMPONENT: CHATBOT WIDGET
+   ========================================================================== */
+.chatbot-widget { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
+
+.chat-btn {
+  width: 75px; height: 75px;
+  border-radius: 50%;
+  background: var(--navy-primary);
+  border: 2px solid var(--gold-primary);
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.chat-btn:hover { transform: scale(1.1); }
+
+.bot-icon-graphic {
+  width: 40px; height: 40px;
+  background: var(--gold-primary);
+  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 18C9.33 18 7 16.67 6 14.5C6 12.5 9.97 11.5 12 11.5C14.03 11.5 18 12.5 18 14.5C17 16.67 14.67 18 12 18Z" fill="black"/></svg>') no-repeat center;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 18C9.33 18 7 16.67 6 14.5C6 12.5 9.97 11.5 12 11.5C14.03 11.5 18 12.5 18 14.5C17 16.67 14.67 18 12 18Z" fill="black"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+.chat-window {
+  position: absolute; bottom: 90px; right: 0; width: 380px; height: 550px;
+  background: #fff; border-radius: 16px; box-shadow: 0 20px 80px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column; overflow: hidden;
+  transform: translateY(20px); opacity: 0; pointer-events: none; transition: 0.4s;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.chat-window.active { transform: translateY(0); opacity: 1; pointer-events: all; }
+
+.chat-header {
+  background: var(--navy-primary); padding: 20px; color: #fff;
+  display: flex; align-items: center; gap: 15px; border-bottom: 3px solid var(--gold-primary);
+}
+.chat-avatar-large {
+  width: 45px; height: 45px; border-radius: 50%; background: var(--white);
+  display: flex; align-items: center; justify-content: center; color: var(--navy-primary); font-size: 1.2rem;
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+.chat-body { flex: 1; background: #f4f6f8; padding: 20px; overflow-y: auto; }
+.msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; margin-bottom: 12px; line-height: 1.5; }
+.msg.bot { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px 12px 12px 0; color: var(--text-dark); }
+.msg.user { background: var(--navy-primary); color: #fff; margin-left: auto; border-radius: 12px 12px 0 12px; }
+
+.chat-input-area { padding: 15px; background: #fff; border-top: 1px solid #eee; display: flex; gap: 10px; }
+.chat-input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 20px; outline: none; transition: 0.3s; }
+.chat-input-area input:focus { border-color: var(--gold-primary); }
+.chat-input-area button { background: var(--gold-primary); color: var(--navy-primary); width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.1rem; }
+
+/* ==========================================================================
+   12. FOOTER
+   ========================================================================== */
+.royal-footer {
+  background-color: var(--navy-deep);
+  color: #a8b2d1;
+  padding-top: 80px;
+  border-top: 4px solid var(--gold-primary);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-col h4 { color: var(--white); margin-bottom: 25px; font-size: 1.2rem; }
+.footer-col p { font-size: 0.95rem; margin-bottom: 15px; }
+
+.footer-col a {
+  display: block;
+  color: #a8b2d1;
+  margin-bottom: 12px;
+  transition: 0.3s;
+}
+.footer-col a:hover { color: var(--gold-primary); padding-left: 8px; }
+
+.footer-bottom {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 0.85rem;
+  background: rgba(0,0,0,0.2);
+}
+
+/* ==========================================================================
+   13. RESPONSIVE MEDIA QUERIES (UPDATED FOR COMPATIBILITY)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  /* Tablet Optimization */
+  .hero h1 { font-size: 3.5rem; }
+  .split-layout { gap: 40px; }
+  .nav-menu { gap: 20px; } /* Tighten menu spacing on tablets */
+  .nav-menu a { font-size: 0.8rem; }
+  .btn { padding: 12px 24px; }
+}
+
+@media (max-width: 768px) {
+  /* Mobile Layout */
+  .nav-menu { display: none; } /* JS Toggle needed */
+  .hamburger { display: block; cursor: pointer; }
+  
+  .split-layout, .grid-3, .team-grid, .footer-grid, .info-box {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .hero-content { padding-top: 80px; }
+  .hero h1 { font-size: 2.5rem; }
+  
+  /* Components */
+  .image-frame { margin-bottom: 40px; }
+  .info-box { gap: 20px; border-left: none; border-top: 5px solid var(--gold-primary); }
+  .team-card { flex-direction: column; }
+  .member-img, .member-info { width: 100%; }
+  .member-img { height: 350px; }
+  .floating-badge { right: 50%; transform: translateX(50%); bottom: -20px; }
+  
+  /* Chatbot */
+  .chat-window { width: 90%; right: 5%; bottom: 100px; }
+}
